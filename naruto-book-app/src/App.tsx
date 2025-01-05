@@ -30,7 +30,7 @@ function App() {
           {characters.map((character) => (
             <Card
               key={character.id}
-              images={character.images}
+              character={character}
             />
           ))}
         </div>
