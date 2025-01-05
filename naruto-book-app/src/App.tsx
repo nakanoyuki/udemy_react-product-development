@@ -3,10 +3,12 @@ import "./App.css";
 import axios from "axios";
 import { Card } from "./Card";
 
-type Character = {
+export type Character = {
   id: number;
   name: string;
   images: string[];
+  debut?: { appersIn: string };
+  personal?: { affiliation: string };
 };
 
 function App() {
@@ -28,10 +30,7 @@ function App() {
       <main>
         <div className="cards-container">
           {characters.map((character) => (
-            <Card
-              key={character.id}
-              character={character}
-            />
+            <Card key={character.id} character={character} />
           ))}
         </div>
       </main>
