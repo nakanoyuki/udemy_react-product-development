@@ -43,6 +43,11 @@ function App() {
 
   return (
     <div className="container">
+      <div className="header">
+        <div className="header-content">
+          <img src="logo.png" alt="" className="logo" />
+        </div>
+      </div>
       {loading ? (
         <div>Loading...</div>
       ) : (
