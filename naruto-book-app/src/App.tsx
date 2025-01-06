@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import { Card } from "./Card";
+import { PageNation } from "./PageNation";
 
 export type Character = {
   id: number;
@@ -28,6 +29,12 @@ function App() {
     setLoading(false);
   };
 
+  const handlePrev = async () => {
+    const prevPage = page - 1;
+    await fetchCharacters(prevPage);
+    setPage(prevPage);
+  };
+
   const handleNext = async () => {
     const nextPage = page + 1;
     await fetchCharacters(nextPage);
@@ -45,13 +52,12 @@ function App() {
               <Card key={character.id} character={character} />
             ))}
           </div>
-          <div className="pager">
-            <button className="prev">Prev</button>
-            <span className="page-number">{page}</span>
-            <button className="next" onClick={handleNext}>
-              Next
-            </button>
-          </div>
+          <PageNation
+            handlePrev={handlePrev}
+            handleNext={handleNext}
+            page={page}
+            characterLength={characters.length}
+          />
         </main>
       )}
     </div>
