@@ -12,4 +12,5 @@ export const getToken = async () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }
   );
+  return response.data;
 };
