@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import SpotifyClient from "./lib/spotifyClient";
 import { SongList } from "./components/SongList";
 
+export const processSongsData = (items: any) => {
+  return items.map((item: any) => ({
+    ...item.track,
+  }));
+};
+
 export default function App() {
-  const [, setPopularSongs] = useState([]);
+  const [popularSongs, setPopularSongs] = useState([]);
   const [, setSpotify] = useState<SpotifyClient | null>(null);
 
   useEffect(() => {
@@ -11,13 +17,15 @@ export default function App() {
       const spotifyInstance = await SpotifyClient.initialize();
       setSpotify(spotifyInstance);
 
+      // Spotify API からデータを取得
       const songs = await spotifyInstance.getPopularSongs();
-      setPopularSongs(songs);
+      const processedSongs = processSongsData(songs);
+      setPopularSongs(processedSongs);
     };
-
     initializeSpotify();
   }, []);
 
+  // console.log(popularSongs);
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <main className="flex-1 p-8 mb-20">
@@ -26,7 +34,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          <SongList />
+          <SongList songs={popularSongs} />
         </section>
       </main>
     </div>
