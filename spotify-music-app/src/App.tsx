@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import ShopifyClient from "./lib/spotifyClient";
+import SpotifyClient from "./lib/spotifyClient";
+import { SongList } from "./components/SongList";
 
 export default function App() {
-  const [spotify, setSpotify] = useState<ShopifyClient | null>(null);
+  const [, setPopularSongs] = useState([]);
+  const [, setSpotify] = useState<SpotifyClient | null>(null);
 
   useEffect(() => {
     const initializeSpotify = async () => {
-      const spotifyInstance = await ShopifyClient.initialize();
+      const spotifyInstance = await SpotifyClient.initialize();
       setSpotify(spotifyInstance);
+
+      const songs = await spotifyInstance.getPopularSongs();
+      setPopularSongs(songs);
     };
 
     initializeSpotify();
@@ -21,6 +26,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
+          <SongList />
         </section>
       </main>
     </div>
