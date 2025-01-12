@@ -11,16 +11,18 @@ export const processSongsData = (items: any) => {
 export default function App() {
   const [popularSongs, setPopularSongs] = useState([]);
   const [, setSpotify] = useState<SpotifyClient | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initializeSpotify = async () => {
+      setLoading(true);
       const spotifyInstance = await SpotifyClient.initialize();
       setSpotify(spotifyInstance);
 
-      // Spotify API からデータを取得
       const songs = await spotifyInstance.getPopularSongs();
       const processedSongs = processSongsData(songs);
       setPopularSongs(processedSongs);
+      setLoading(false);
     };
     initializeSpotify();
   }, []);
@@ -34,7 +36,7 @@ export default function App() {
         </header>
         <section>
           <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          <SongList songs={popularSongs} />
+          <SongList loading={loading} songs={popularSongs} />
         </section>
       </main>
     </div>
