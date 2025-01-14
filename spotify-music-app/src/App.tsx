@@ -10,11 +10,11 @@ export const processSongsData = (items: any) => {
 };
 
 export default function App() {
+  const [loading, setLoading] = useState(false);
+  const [, setSpotify] = useState<SpotifyClient | null>(null);
   const [popularSongs, setPopularSongs] = useState([]);
   const [keyword, setKeyWord] = useState("");
-  const [searchedSongs, setSearchedSongs] = useState();
-  const [, setSpotify] = useState<SpotifyClient | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [searchedSongs, setSearchedSongs] = useState([]);
 
   useEffect(() => {
     const initializeSpotify = async () => {
@@ -29,21 +29,42 @@ export default function App() {
     };
     initializeSpotify();
   }, []);
-  
 
   const handleInputChange = (e: any) => {
-    setSearchedSongs(e.target.value);
+    setKeyWord(e.target.value);
   };
+
+  const searchSongs = async () => {
+    if (!keyword) return;
+    setLoading(true);
+    const spotifyInstance = await SpotifyClient.initialize();
+    setSpotify(spotifyInstance);
+
+    const result = await spotifyInstance.getSearchSongs(keyword);
+    setSearchedSongs(result);
+    setLoading(false);
+  };
+
+  const isSearchActive = keyword.trim() !== "" && searchedSongs.length > 0;
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <main className="flex-1 p-8 mb-20">
         <header className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold">Music App</h1>
         </header>
-        <SearchInput handleInputChange={handleInputChange} />
+        <SearchInput
+          handleInputChange={handleInputChange}
+          searchSongs={searchSongs}
+        />
         <section>
-          <h2 className="text-2xl font-semibold mb-5">Popular Songs</h2>
-          <SongList loading={loading} songs={popularSongs} />
+          <h2 className="text-2xl font-semibold mb-5">
+            {isSearchActive ? "Search Songs" : "Popular Songs"}
+          </h2>
+          <SongList
+            loading={loading}
+            songs={isSearchActive ? searchedSongs : popularSongs}
+          />
         </section>
       </main>
     </div>

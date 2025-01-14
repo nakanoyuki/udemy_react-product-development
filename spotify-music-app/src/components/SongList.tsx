@@ -9,10 +9,10 @@ export function SongList({ songs, loading }: any) {
       </div>
     );
   }
+
   return (
     <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
       {songs.map((song: any) => {
-        console.log(song);
         return (
           <a
             href={song.external_urls.spotify}
