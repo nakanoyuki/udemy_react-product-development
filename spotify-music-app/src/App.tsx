@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SpotifyClient from "./lib/spotifyClient";
 import { SongList } from "./components/SongList";
 import { SearchInput } from "./components/SearchInput";
+import { Pagination } from "./components/Pagination";
 
 export const processSongsData = (items: any) => {
   return items.map((item: any) => ({
@@ -34,7 +35,7 @@ export default function App() {
     setKeyWord(e.target.value);
   };
 
-  const searchSongs = async () => {
+  const searchSongs = async (page: any) => {
     if (!keyword) return;
     setLoading(true);
     const spotifyInstance = await SpotifyClient.initialize();
@@ -65,6 +66,7 @@ export default function App() {
             loading={loading}
             songs={isSearchActive ? searchedSongs : popularSongs}
           />
+          {isSearchActive && <Pagination />}
         </section>
       </main>
     </div>
