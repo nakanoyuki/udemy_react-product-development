@@ -16,6 +16,8 @@ export default function App() {
   const [popularSongs, setPopularSongs] = useState([]);
   const [keyword, setKeyWord] = useState("");
   const [searchedSongs, setSearchedSongs] = useState([]);
+  const [page, setPage] = useState(1);
+  const limit = 20;
 
   useEffect(() => {
     const initializeSpotify = async () => {
@@ -35,18 +37,29 @@ export default function App() {
     setKeyWord(e.target.value);
   };
 
-  const searchSongs = async (page: any) => {
+  const searchSongs = async () => {
     if (!keyword) return;
     setLoading(true);
+    const offset = (page - 1) * limit;
     const spotifyInstance = await SpotifyClient.initialize();
     setSpotify(spotifyInstance);
 
-    const result = await spotifyInstance.getSearchSongs(keyword);
+    const result = await spotifyInstance.getSearchSongs(keyword, limit, offset);
     setSearchedSongs(result);
     setLoading(false);
   };
 
   const isSearchActive = keyword.trim() !== "" && searchedSongs.length > 0;
+
+  const moveToNext = async () => {
+    setPage((prevPage) => prevPage + 1);
+    await searchSongs();
+  };
+
+  const moveToPrev = async () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 1));
+    await searchSongs();
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
@@ -66,7 +79,9 @@ export default function App() {
             loading={loading}
             songs={isSearchActive ? searchedSongs : popularSongs}
           />
-          {isSearchActive && <Pagination />}
+          {isSearchActive && (
+            <Pagination onNext={moveToNext} onPrev={moveToPrev} />
+          )}
         </section>
       </main>
     </div>

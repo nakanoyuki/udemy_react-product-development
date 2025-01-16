@@ -20,7 +20,7 @@ class SpotifyClient {
     return response.data.tracks.items;
   }
 
-  async getSearchSongs(keyword: string, limit?: number, offset?: number) {
+  async getSearchSongs(keyword: string, limit: number, offset: number) {
     const response = await axios.get("https://api.spotify.com/v1/search", {
       headers: { Authorization: "Bearer " + this.token },
       params: { q: keyword, type: "track", limit, offset },
