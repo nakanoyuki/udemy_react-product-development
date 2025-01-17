@@ -17,6 +17,9 @@ export default function App() {
   const [keyword, setKeyWord] = useState("");
   const [searchedSongs, setSearchedSongs] = useState([]);
   const [page, setPage] = useState(1);
+  const [hasPrev, setHasPrev] = useState(false);
+  // const [hasNext, setHasNext] = useState(false);
+
   const limit = 20;
 
   useEffect(() => {
@@ -43,8 +46,10 @@ export default function App() {
     const offset = (page - 1) * limit;
     const spotifyInstance = await SpotifyClient.initialize();
     setSpotify(spotifyInstance);
-
     const result = await spotifyInstance.getSearchSongs(keyword, limit, offset);
+    // console.log(result);
+    // setHasPrev(result.prev != null);
+    // setHasNext(result.next != null);
     setSearchedSongs(result);
     setLoading(false);
   };
@@ -80,7 +85,11 @@ export default function App() {
             songs={isSearchActive ? searchedSongs : popularSongs}
           />
           {isSearchActive && (
-            <Pagination onNext={moveToNext} onPrev={moveToPrev} />
+            <Pagination
+              page={page}
+              onPrev={hasPrev ? moveToPrev : null}
+              onNext={moveToNext}
+            />
           )}
         </section>
       </main>
