@@ -8,3 +8,14 @@ Udemy講座　
 [NARUTO DB](https://narutodb.xyz/docs/characters/getAllCharacters)からデータを取得し表示
 
 ![gif](gif/naruto-book-app.gif)
+
+
+## 2.Spotify人気の音楽表示＆検索アプリ
+
+[Spotify API](https://narutodb.xyz/docs/characters/getAllCharacters)からデータを取得し人気の音楽を表示　検索できるアプリ
+
+- 人気の音楽
+![gif](gif/spotify-music-app-1.gif)
+
+- 検索結果
+![gif](gif/spotify-music-app.gif)
