@@ -1,14 +1,14 @@
 export function Pagination({ page, onNext, onPrev }: any) {
   return (
-    <div className="mt-8 flex justify-center">
+    <div className="mt-8 flex justify-center items-center">
       <button
         onClick={onPrev}
         disabled={onPrev == null}
-        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed mr-4"
       >
         Previous
       </button>
-      {page}
+      <p>{page}</p>
       <button
         onClick={onNext}
         disabled={onNext == null}
