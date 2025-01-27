@@ -6,12 +6,11 @@ import { SessionContext } from "../SessionProvider";
 function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const sessionContext = useContext(SessionContext);
 
+  const sessionContext = useContext(SessionContext);
   if (!sessionContext) {
     throw new Error("Signin must be used within a SessionProvider");
   }
-
   const { currentUser, setCurrentUser } = sessionContext;
 
   const signin = async () => {

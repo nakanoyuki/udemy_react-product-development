@@ -1,4 +1,17 @@
+import { useContext } from "react";
+import { SessionContext } from "../SessionProvider";
+import { Navigate } from "react-router-dom";
+
 function Home() {
+
+  const sessionContext = useContext(SessionContext);
+  if (!sessionContext) {
+    throw new Error("Signin must be used within a SessionProvider");
+  }
+  const { currentUser } = sessionContext;
+
+  if (currentUser == null) return <Navigate replace to="/signin" />;
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-[#34D399] p-4">
