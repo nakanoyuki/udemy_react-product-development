@@ -1,9 +1,19 @@
 import { createContext, useState } from "react";
 
-const SessionContext = createContext();
+interface User {
+  id: string;
+  userName: string;
+}
+
+interface SessionContextType {
+  currentUser: User | null;
+  setCurrentUser: (user: User | null) => void;
+}
+
+const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 const SessionProvider = (props: any) => {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   return (
     <SessionContext.Provider value={{ currentUser, setCurrentUser }}>

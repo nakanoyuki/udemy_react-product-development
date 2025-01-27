@@ -8,18 +8,23 @@ function Signin() {
   const [password, setPassword] = useState("");
   const sessionContext = useContext(SessionContext);
 
-  // コンテキストが未設定の場合のチェックを追加
   if (!sessionContext) {
-    throw new Error("SessionContext must be used within a SessionProvider");
+    throw new Error("Signin must be used within a SessionProvider");
   }
+
   const { currentUser, setCurrentUser } = sessionContext;
 
   const signin = async () => {
-    const user = await authRepository.signin(email, password);
-    setCurrentUser(user);
+    try {
+      const user = await authRepository.signin(email, password);
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Signin failed:", error);
+    }
   };
 
   if (currentUser != null) return <Navigate replace to="/" />;
+
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center">
