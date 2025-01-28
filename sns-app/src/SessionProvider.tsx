@@ -2,11 +2,12 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { authRepository } from "./repositories/auth";
 
 interface Props {
-  children: ReactNode; // 子要素を受け取るプロパティ
+  children: ReactNode;
 }
 interface User {
   id: string;
   userName: string;
+  email?: string;
 }
 
 interface SessionContextType {

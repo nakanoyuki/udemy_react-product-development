@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { SessionContext } from "../SessionProvider";
 import { Navigate } from "react-router-dom";
+import { SideMenu } from "../components/SideMenu";
 
 function Home() {
-
   const sessionContext = useContext(SessionContext);
   if (!sessionContext) {
     throw new Error("Signin must be used within a SessionProvider");
@@ -34,6 +34,7 @@ function Home() {
             </div>
             <div className="mt-4"></div>
           </div>
+          <SideMenu />
         </div>
       </div>
     </div>
