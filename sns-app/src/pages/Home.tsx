@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../SessionProvider";
 import { Navigate } from "react-router-dom";
 import { SideMenu } from "../components/SideMenu";
@@ -6,6 +6,10 @@ import { postRepository } from "../repositories/post";
 
 function Home() {
   const [content, setContent] = useState("");
+  const [post, setPost] = useState<string[]>([]);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   const sessionContext = useContext(SessionContext);
   if (!sessionContext) {
     throw new Error("Signin must be used within a SessionProvider");
@@ -18,6 +22,11 @@ function Home() {
     const post = await postRepository.create(content, currentUser.id);
     console.log(post);
     setContent("");
+  };
+
+  const fetchPosts = async () => {
+    const posts = await postRepository.find();
+    setPost(posts);
   };
 
   return (
