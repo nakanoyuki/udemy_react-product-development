@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { authRepository } from "../repositories/auth";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const signup = async () => {
-    const user = await authRepository.signup(name, email, password);
+    try {
+      const user = await authRepository.signup(name, email, password);
+      if (user) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+    }
   };
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
