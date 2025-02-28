@@ -4,17 +4,25 @@ import { Navigate } from "react-router-dom";
 import { SideMenu } from "../components/SideMenu";
 import { postRepository } from "../repositories/post";
 import { Post } from "../components/Post";
+import { Pagination } from "../components/Pagination";
 
-type postProps = {
-  id: number;
-  post: string;
-}[];
+export type PostType = {
+  id: string;
+  content: string;
+  userId: string;
+  userName: string;
+};
+
+type postProps = PostType[];
+
+const limit = 5;
 
 function Home() {
   const [content, setContent] = useState("");
   const [posts, setPosts] = useState<postProps>([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(page);
   }, []);
   const sessionContext = useContext(SessionContext);
   if (!sessionContext) {
@@ -33,9 +41,26 @@ function Home() {
     setContent("");
   };
 
-  const fetchPosts = async () => {
-    const posts = await postRepository.find();
+  const fetchPosts = async (page: number) => {
+    const posts = await postRepository.find(page, limit);
     setPosts(posts);
+  };
+
+  const moveToNext = async () => {
+    const nextPage = page + 1;
+    await fetchPosts(nextPage);
+    setPage(nextPage);
+  };
+
+  const moveToPrev = async () => {
+    const prevPage = page - 1;
+    await fetchPosts(prevPage);
+    setPage(prevPage);
+  };
+
+  const deletePost = async (postId: string) => {
+    await postRepository.delete(postId);
+    setPosts(posts.filter((post) => post.id !== postId));
   };
 
   return (
@@ -68,9 +93,13 @@ function Home() {
             </div>
             <div className="mt-4">
               {posts.map((post) => (
-                <Post key={post.id} post={post} />
+                <Post key={post.id} post={post} onDelete={deletePost} />
               ))}
             </div>
+            <Pagination
+              onPrev={page > 1 ? moveToPrev : undefined}
+              onNext={posts.length >= limit ? moveToNext : undefined}
+            />
           </div>
           <SideMenu />
         </div>
